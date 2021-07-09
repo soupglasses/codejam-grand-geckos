@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "grand-geckos"
+name = "grand_geckos"
 version = "0.1.0"
 description = ""
 authors = ["Sofi <imsofi@users.noreply.github.com>"]
@@ -47,6 +47,6 @@ exclude = '''
 '''
 
 [tool.taskipy.tasks]
-run = "python -m grand-geckos"
+main = "python -m grand_geckos"
 lint = "pre-commit run --all-files"
 precommit = "pre-commit install"

@@ -15,7 +15,7 @@ pre-commit install
 
 If you are not using `poetry shell`:
 ```bash
-poetry run task run
+poetry run task main
 ```
 
 If you are using `poetry shell`:
