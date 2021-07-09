@@ -1,4 +1,6 @@
-# exploring-git
+# Codejam 8 - Team Grand Geckos
+
+[About Python Discord's Code Jam 8](https://pythondiscord.com/events/code-jams/8/)
 
 ## Development
 
@@ -21,12 +23,6 @@ poetry run task main
 If you are using `poetry shell`:
 ```bash
 python3 -m REPO_NAME
-```
-
-### Running Tests:
-
-```bash
-poetry run task test
 ```
 
 ### Before Commiting/Pushing:
