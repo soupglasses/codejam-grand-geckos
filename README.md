@@ -4,6 +4,8 @@
 
 ## Development
 
+Requires Python 3.8 or higher
+
 ### Dependency:
 ```bash
 pip install --user poetry
