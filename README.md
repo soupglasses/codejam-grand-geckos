@@ -7,6 +7,7 @@
 Requires Python 3.8 or higher
 
 ### Dependency:
+
 ```bash
 pip install --user poetry
 ```
@@ -17,24 +18,24 @@ pip install --user poetry
 git clone https://github.com/imsofi/codejam-grand-geckos
 cd codejam-grand-geckos
 poetry install
-pre-commit install
+poetry run pre-commit install
 ```
 
 ### Running the Project:
 
-If you are not using `poetry shell`:
+Using poetry run:
 ```bash
 poetry run task main
 ```
 
-If you are using `poetry shell`:
+If you are in a `poetry shell`:
 ```bash
 python3 -m grand_geckos
 ```
 
 ### Before Commiting/Pushing:
 
-You should run it trough the linters:
+Its reccomended to run it trough the linters manually:
 
 With poetry:
 ```bash
