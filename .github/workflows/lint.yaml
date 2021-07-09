@@ -33,7 +33,7 @@ jobs:
 
       # Install and configure Poetry
       - name: Install Poetry
-        uses: snok/install-poetry@v.1.1.6
+        uses: snok/install-poetry@v1.1.6
         with:
           virtualenvs-create: true
           virtualenvs-path: ${{ env.POETRY_CACHE_DIR }}
