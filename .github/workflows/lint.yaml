@@ -46,16 +46,15 @@ jobs:
           path: ${{ env.POETRY_CACHE_DIR }}
           key: python-poetry-${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{ hashFiles('./poetry.lock') }}
 
+      # Install dependencies trough poetry
       - name: Install dependencies
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: poetry install --no-interaction --no-root
 
+      # Install the libary itself
       - name: Install library
         run: poetry install --no-interaction
 
-      # Poetry setup
+      # Run pre-commit hooks
       - name: Run hooks
-        run: poetry run task lint
-        env:
-          # Force pre-commit to do a system install.
-          PIP_USER: 0
+        uses: pre-commit/action@v2.0.3
