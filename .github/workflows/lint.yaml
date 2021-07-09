@@ -15,7 +15,7 @@ jobs:
 
     env:
       # Set an environment variable to select pip's cache directory for us to actually cache between runs.
-      PIP_CACHE_DIR: /tmp/pip-cache-dir
+      POETRY_CACHE_DIR: /tmp/poetry
       # The Python version your project uses. Feel free to change this if required.
       PYTHON_VERSION: 3.9
 
@@ -31,24 +31,31 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      # This step caches our Python dependencies. To make sure we
-      # only restore a cache when the dependencies, the python version and
-      # the runner operating system we create a cache key
-      # that is a composite of those states.
-      # Only when the context is exactly the same, we will restore the cache.
-      - name: Restore pip cache
+      # Install and configure Poetry
+      - name: Install Poetry
+        uses: snok/install-poetry@v.1.1.6
+        with:
+          virtualenvs-create: true
+          virtualenvs-path: ${{ env.POETRY_CACHE_DIR }}
+
+      # Check for cached Poetry dependencies
+      - name: Restore Poetry cache
+        id: cached-poetry-dependencies
         uses: actions/cache@v2
         with:
-          path: ${{ env.PIP_CACHE_DIR }}
-          key: "python-pip-${{ runner.os }}-\
-          ${{ steps.python.outputs.python-version }}-\
-          ${{ hashFiles('./pyproject.toml', './poetry.lock') }}"
+          path: ${{ env.POETRY_CACHE_DIR }}
+          key: python-poetry-${{ runner.os }}-${{ steps.python.outputs.python-version }}-${{ hashFiles('./poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      - name: Install library
+        run: poetry install --no-interaction
 
       # Poetry setup
-      - name: Run hooks through our Poetry environment.
-        run: |
-          poetry install
-          poetry run python -m pre-commit run --all-files
+      - name: Run hooks
+        run: poetry run task lint
         env:
           # Force pre-commit to do a system install.
           PIP_USER: 0
