@@ -7,8 +7,8 @@
 ### First Time Setup:
 
 ```bash
-git clone REPO_LINK
-cd REPO_NAME
+git clone https://github.com/imsofi/codejam-grand-geckos
+cd codejam-grand-geckos
 poetry install
 pre-commit install
 ```
@@ -22,7 +22,7 @@ poetry run task main
 
 If you are using `poetry shell`:
 ```bash
-python3 -m REPO_NAME
+python3 -m grand_geckos
 ```
 
 ### Before Commiting/Pushing:
