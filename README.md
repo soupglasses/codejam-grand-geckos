@@ -4,6 +4,14 @@
 
 ## Development
 
+### Dependencies:
+
+To install poetry and pre-commit:
+```bash
+pip install --user poetry
+pip install pre-commit
+```
+
 ### First Time Setup:
 
 ```bash
