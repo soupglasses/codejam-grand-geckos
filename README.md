@@ -4,6 +4,11 @@
 
 ## Development
 
+### Dependency:
+```bash
+pip install --user poetry
+```
+
 ### First Time Setup:
 
 ```bash
