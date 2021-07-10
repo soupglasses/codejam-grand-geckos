@@ -7,6 +7,8 @@ from asciimatics.widgets import Button, Divider, Frame, Layout, Text, TextBox, W
 
 
 class EditorFrame(Frame):
+    box_data: str
+
     def __init__(self, screen):
         super().__init__(
             screen,
@@ -17,9 +19,7 @@ class EditorFrame(Frame):
             has_border=False,
         )
 
-        self._textbox = TextBox(
-            Widget.FILL_FRAME,
-        )
+        self._textbox = TextBox(Widget.FILL_FRAME, as_string=True)
 
         layout = Layout([100], fill_frame=True)
         self.add_layout(layout)
@@ -35,6 +35,7 @@ class EditorFrame(Frame):
         self.fix()
 
     def _save(self):
+        EditorFrame.box_data = self._textbox.value
         raise NextScene("Save")
 
     @staticmethod
@@ -67,6 +68,8 @@ class SaveFrame(Frame):
 
     def _write(self):
         self.save()
+        with open(self.data["filename"], "w") as f:
+            f.write(EditorFrame.box_data)
         raise NextScene("Editor")
 
     @staticmethod
