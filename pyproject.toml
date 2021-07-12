@@ -8,6 +8,7 @@ authors = ["Sofi <imsofi@users.noreply.github.com>"]
 python = "^3.8"
 prompt-toolkit = "^3.0.19"
 password-strength = "^0.0.3"
+SQLAlchemy = "^1.4.20"
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"
