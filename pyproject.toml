@@ -7,6 +7,7 @@ authors = ["Sofi <imsofi@users.noreply.github.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 SQLAlchemy = "^1.4.20"
+cryptography = "^3.4.7"
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"
