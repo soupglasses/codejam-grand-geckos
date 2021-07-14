@@ -6,6 +6,7 @@ authors = ["Sofi <imsofi@users.noreply.github.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+prompt-toolkit = "^3.0.19"
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"
@@ -20,8 +21,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.isort]
 profile = "black"
-multi_line_output = 5
-line_length = 119
 
 [tool.black]
 line-length = 119

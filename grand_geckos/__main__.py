@@ -1,5 +1,4 @@
-import sys
+from grand_geckos.ui import get_app
 
-from grand_geckos.features import say_hello
-
-print(say_hello(" ".join(sys.argv[1:]) or "World"))
+app = get_app()
+app.run()
