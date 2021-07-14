@@ -1,4 +1,4 @@
-from base64 import urlsafe_b64encode
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 from datetime import datetime
 from os import urandom
 
@@ -8,6 +8,8 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import relationship
+
+from grand_geckos.database.exceptions import PasswordMismatch
 
 Base: DeclarativeMeta = declarative_base()
 
@@ -23,7 +25,9 @@ class User(Base):
     credentials = relationship("Credential")
     last_login = Column(DateTime)
 
-    def __init__(self, username: str, password: str) -> None:
+    def __init__(self, username: str, password: str, password_confirm: str) -> None:
+        if password_confirm != password:
+            raise PasswordMismatch("Password Mismatch, the two passwords are not the same")
         salt_decoded = urandom(16)
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt_decoded, iterations=10000)
         key = urlsafe_b64encode(kdf.derive((password.encode("utf-8"))))
@@ -44,3 +48,16 @@ class Credential(Base):
     credential_password = Column(String)
     user_id = Column(Integer, ForeignKey("User.id"))
     platform = Column(String)
+    user = relationship("User", back_populates="credentials")
+
+    def __init__(
+        self, credential_name: str, credential_username: str, credential_password: str, platform: str, user: User
+    ) -> None:
+        salt = urlsafe_b64decode(user.salt)
+        kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=10000)
+        key = urlsafe_b64encode(kdf.derive((user.password.encode("utf-8"))))
+        f = Fernet(key)
+        self.credential_name = f.encrypt(credential_name.encode("utf-8")).decode("utf-8")
+        self.credential_username = f.encrypt(credential_username.encode("utf-8")).decode("utf-8")
+        self.credential_password = f.encrypt(credential_password.encode("utf-8")).decode("utf-8")
+        self.platform = f.encrypt(platform.encode("utf-8")).decode("utf-8")
