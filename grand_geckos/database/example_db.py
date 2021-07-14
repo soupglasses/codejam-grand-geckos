@@ -3,18 +3,12 @@ from dataclasses import dataclass
 from typing import Iterator, Optional
 
 
-@dataclass(eq=True, frozen=True)
-class Platform:
-    id: int
-    name: str
-
-
 @dataclass
 class Credential:
     username: str
     password: str
     id: int
-    platform: Platform
+    platform: str
     notes: str = ""
 
 
@@ -25,23 +19,19 @@ class ExampleDB:
     """
 
     _cred_ids = itertools.count()
-    _plat_ids = itertools.count()
 
     def __init__(self):
-        self._platforms = {
-            "google.com": Platform(next(self._plat_ids), "google.com"),
-            "pypi.org": Platform(next(self._plat_ids), "pypi.org"),
-        }
+        self._platforms = ["google.com", "pypi.org"]
         self._db = [
-            Credential("sofi", "password", id=next(self._cred_ids), platform=self._platforms["google.com"]),
-            Credential("greg", "12345678", id=next(self._cred_ids), platform=self._platforms["google.com"]),
-            Credential("bob", "123asd123asd", id=next(self._cred_ids), platform=self._platforms["google.com"]),
-            Credential("sofi", "password321", id=next(self._cred_ids), platform=self._platforms["pypi.org"]),
+            Credential("sofi", "password", id=next(self._cred_ids), platform="google.com"),
+            Credential("greg", "12345678", id=next(self._cred_ids), platform="google.com"),
+            Credential("bob", "123asd123asd", id=next(self._cred_ids), platform="google.com"),
+            Credential("sofi", "password321", id=next(self._cred_ids), platform="pypi.org"),
         ]
 
     @property
-    def platforms(self) -> Iterator[Platform]:
-        return iter(self._platforms.values())
+    def platforms(self) -> Iterator[str]:
+        return iter(set(cred.platform for cred in self._db))
 
     @property
     def accounts(self) -> Iterator[Credential]:
@@ -50,7 +40,7 @@ class ExampleDB:
     def match_username(self, username: str) -> Iterator[Credential]:
         return iter(cred for cred in self._db if cred.username == username)
 
-    def match_platform(self, platform: Platform) -> Iterator[Credential]:
+    def match_platform(self, platform: str) -> Iterator[Credential]:
         return iter(cred for cred in self._db if cred.platform == platform)
 
     def match_password(self, password: str) -> Iterator[Credential]:
@@ -58,18 +48,11 @@ class ExampleDB:
 
     def search(self, search: str) -> Iterator[Credential]:
         return iter(
-            cred
-            for cred in self._db
-            if search in cred.username or search in cred.platform.name or search in cred.notes
+            cred for cred in self._db if search in cred.username or search in cred.platform or search in cred.notes
         )
 
     def add_account(self, username: str, *, password: Optional[str] = None, platform: str):
-        if platform not in self._platforms:
-            self._platforms[platform] = Platform(next(self._plat_ids), platform)
-
-        plat = self._platforms[platform]
-        cred = Credential(username, password or "ENCRYPTED_EXAMPLE", id=next(self._cred_ids), platform=plat)
-
+        cred = Credential(username, password or "ENCRYPTED_EXAMPLE", id=next(self._cred_ids), platform=platform)
         self._db.append(cred)
 
     def remove_account(self, account: Credential):
@@ -77,10 +60,6 @@ class ExampleDB:
             raise Exception("Account does not exist in database.")
 
         self._db.remove(account)
-
-        # Check if it was the last account for the platform. If so, delete it.
-        if not next(self.match_platform(account.platform), None):
-            self._platforms.pop(account.platform.name)
 
 
 if __name__ == "__main__":
