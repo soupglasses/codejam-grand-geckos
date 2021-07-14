@@ -21,7 +21,6 @@ class ExampleDB:
     _cred_ids = itertools.count()
 
     def __init__(self):
-        self._platforms = ["google.com", "pypi.org"]
         self._db = [
             Credential("sofi", "password", id=next(self._cred_ids), platform="google.com"),
             Credential("greg", "12345678", id=next(self._cred_ids), platform="google.com"),
@@ -51,7 +50,7 @@ class ExampleDB:
             cred for cred in self._db if search in cred.username or search in cred.platform or search in cred.notes
         )
 
-    def add_account(self, username: str, *, password: Optional[str] = None, platform: str):
+    def add_account(self, username: str, password: Optional[str] = None, *, platform: str):
         cred = Credential(username, password or "ENCRYPTED_EXAMPLE", id=next(self._cred_ids), platform=platform)
         self._db.append(cred)
 
@@ -82,7 +81,7 @@ if __name__ == "__main__":
     pprint(list(db.match_password("12345678")))
     print('Search: "google.com":')
     pprint(list(db.search("google.com")))
-    db.add_account("sofi@example.com", password="12345678", platform="reddit.com")
+    db.add_account("sofi@example.com", "12345678", platform="reddit.com")
     print('Search: "sof":')
     pprint(list(db.search("sof")))
     db.remove_account(next(db.search("sofi@")))
