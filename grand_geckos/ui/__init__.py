@@ -1,3 +1,3 @@
-from grand_geckos.ui.core import get_app
+from grand_geckos.ui.app import app
 
-__all__ = ["get_app"]
+__all__ = ["app"]
