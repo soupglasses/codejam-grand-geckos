@@ -1,4 +1,3 @@
-from grand_geckos.ui import get_app
+from grand_geckos.ui.app import run_app
 
-app = get_app()
-app.run()
+run_app(case=-1)
