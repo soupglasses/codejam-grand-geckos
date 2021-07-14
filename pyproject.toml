@@ -14,6 +14,7 @@ flake8 = "^3.9.2"
 isort = "^5.9.2"
 pre-commit = "^2.13.0"
 taskipy = "^1.8.1"
+pytest = "^6.2.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -27,11 +28,10 @@ line-length = 119
 target-version = ['py39']
 include = '\.pyi?$'
 exclude = '''
-
 (
   /(
-      \.eggs         # exclude a few common directories in the
-    | \.git          # root of the project
+      \.eggs
+    | \.git
     | \.hg
     | \.mypy_cache
     | \.tox
@@ -40,13 +40,13 @@ exclude = '''
     | buck-out
     | build
     | dist
+    | tests
   )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
 )
 '''
 
 [tool.taskipy.tasks]
 main = "python -m grand_geckos"
+test = "python -m pytest tests/"
 lint = "pre-commit run --all-files"
 precommit = "pre-commit install"
