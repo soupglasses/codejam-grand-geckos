@@ -22,7 +22,7 @@ class User(Base):
     username = Column(String)
     password = Column(String)
     salt = Column(String)
-    credentials = relationship("Credential")
+    credentials = relationship("Credential", cascade="all, delete")
     last_login = Column(DateTime)
 
     def __init__(self, username: str, password: str, password_confirm: str) -> None:

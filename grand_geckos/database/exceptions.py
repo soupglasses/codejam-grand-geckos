@@ -7,3 +7,7 @@ class PasswordMismatch(ArgumentError):
 
 class UserAlreadyExistsError(ArgumentError):
     pass
+
+
+class AuthenticationError(ArgumentError):
+    pass
