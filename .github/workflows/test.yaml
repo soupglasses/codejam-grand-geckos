@@ -1,4 +1,4 @@
-name: Run tests
+name: Test Suite
 
 # Trigger the workflow on both push (to the main repository)
 # and pull requests (against the main repository, but from any repo).
@@ -8,7 +8,7 @@ on: [push, pull_request]
 concurrency: test-${{ github.sha }}
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
 
     env:
@@ -50,3 +50,6 @@ jobs:
       # Install the libary itself
       - name: Install library
         run: poetry install --no-interaction
+
+      - name: Run pytest
+        run: poetry run task test
