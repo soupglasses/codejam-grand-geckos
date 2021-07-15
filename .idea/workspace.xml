@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:pr" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:pr" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="154d6712-b3d9-45d3-a47a-8df28bab8d52" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1vJ0WcijDLPGr0haY2W1G7q1Tde" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="154d6712-b3d9-45d3-a47a-8df28bab8d52" name="Default Changelist" comment="" />
+      <created>1626264917091</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1626264917091</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="690" y="318" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1626292043786">
+      <screen x="0" y="25" width="1920" height="975" />
+    </state>
+    <state x="690" y="318" key="#com.intellij.fileTypes.FileTypeChooser/0.25.1920.975/1920.25.1920.1055@0.25.1920.975" timestamp="1626292043786" />
+    <state x="698" y="282" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1626361118009">
+      <screen x="0" y="25" width="1920" height="975" />
+    </state>
+    <state x="698" y="282" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1920.975/1920.25.1920.1055@0.25.1920.975" timestamp="1626361118009" />
+    <state x="2618" y="303" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.25.1920.977/1920.25.1920.1055@1920.25.1920.1055" timestamp="1626354376379" />
+    <state x="756" y="430" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1626360122351">
+      <screen x="0" y="25" width="1920" height="975" />
+    </state>
+    <state x="756" y="430" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.25.1920.975/1920.25.1920.1055@0.25.1920.975" timestamp="1626360122351" />
+    <state x="2545" y="240" width="670" height="676" key="search.everywhere.popup" timestamp="1626350576694">
+      <screen x="1920" y="25" width="1920" height="1055" />
+    </state>
+    <state x="2545" y="240" width="670" height="676" key="search.everywhere.popup/0.25.1920.975/1920.25.1920.1055@1920.25.1920.1055" timestamp="1626350576694" />
+  </component>
+</project>

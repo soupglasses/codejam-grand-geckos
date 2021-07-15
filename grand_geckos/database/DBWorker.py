@@ -21,7 +21,7 @@ class DatabaseWorker:
         self.user: User = self.session.query(User).filter_by(id=user.id).first()
 
     @classmethod
-    def create_user(cls, username: str, password: str, password_confirm: str) -> Union[None, User]:
+    def create_user(cls, username: str, password: str, password_confirm: str) -> Union[None, "DatabaseWorker"]:
         """Returns a new DatabaseWorker instance with the newly registered user if every check passes"""
         session = sessionmaker(bind=DatabaseWorker.engine)()
         check_user = session.query(User).filter_by(username=username).first()
@@ -41,7 +41,7 @@ class DatabaseWorker:
         del self.session
 
     @classmethod
-    def auth_user(cls, username: str, password: str) -> Union[None, User]:
+    def auth_user(cls, username: str, password: str) -> Union[None, "DatabaseWorker"]:
         """
         Authenticates the user, if the credentials are correct returns a DatabaseWorker instance with the user
 
