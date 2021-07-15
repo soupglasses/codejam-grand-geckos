@@ -7,8 +7,14 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from grand_geckos.database.exceptions import AuthenticationError, UserAlreadyExistsError
-from grand_geckos.database.models import User
+from grand_geckos.database.exceptions import (
+    AuthenticationError,
+    PasswordMismatch,
+    PasswordNotStrongEnough,
+    UserAlreadyExistsError,
+)
+from grand_geckos.database.models import Credential, User
+from grand_geckos.utils.password_checker import check_password
 
 
 class DatabaseWorker:
@@ -23,22 +29,40 @@ class DatabaseWorker:
     @classmethod
     def create_user(cls, username: str, password: str, password_confirm: str) -> Union[None, "DatabaseWorker"]:
         """Returns a new DatabaseWorker instance with the newly registered user if every check passes"""
+        if password != password_confirm:
+            raise PasswordMismatch("Passwords must match!")
         session = sessionmaker(bind=DatabaseWorker.engine)()
         check_user = session.query(User).filter_by(username=username).first()
+        password_strength = check_password(password)
         if check_user is not None:
             raise UserAlreadyExistsError("User already exists")
+        elif password_strength:
+            raise PasswordNotStrongEnough(
+                "Password is not strong enough! \n -" + "\n -".join([str(issue) for issue in password_strength])
+            )
         else:
             user = User(username=username, password=password, password_confirm=password_confirm)
             session.add(user)
             session.commit()
             return cls(user)
 
-    def delete_user(self):
+    def vault_key(self, user: User, password: str) -> Fernet:
+        salt = urlsafe_b64decode(user.salt)
+        kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=10000)
+        key = urlsafe_b64encode(kdf.derive((password.encode("utf-8"))))
+        f = Fernet(key)
+        return f
+
+    def delete_user(self) -> None:
         """Deletes the current logged in user and terminates the session"""
         self.session.query(User).filter_by(id=self.user.id).delete()
         del self.user
         self.session.close()
         del self.session
+
+    def append_credential(self, cred: Credential) -> None:
+        self.user.credentials.append(cred)
+        self.session.commit()
 
     @classmethod
     def auth_user(cls, username: str, password: str) -> Union[None, "DatabaseWorker"]:
