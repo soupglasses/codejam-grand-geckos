@@ -12,6 +12,8 @@ from prompt_toolkit.layout.dimension import Dimension as D
 from prompt_toolkit.styles import BaseStyle
 from prompt_toolkit.widgets import Button, Dialog, Label, TextArea, ValidationToolbar
 
+from grand_geckos.utils.auth_handler import handle_login_event, handle_register_event
+
 
 def login_dialog(style: Optional[BaseStyle] = None) -> Application[str]:
     """
@@ -23,12 +25,13 @@ def login_dialog(style: Optional[BaseStyle] = None) -> Application[str]:
         return True
 
     def register_handler() -> None:
-        # TODO: Register
-        get_app().exit(result=0)
+        # TODO: add password confirmation
+        case, title, text = handle_register_event(username.text, password.text)
+        get_app().exit(result={"case": case, "title": title, "text": text})
 
     def login_handler() -> None:
-        # TODO: Login
-        get_app().exit(result=1)
+        case, title, text = handle_login_event(username.text, password.text)
+        get_app().exit(result={"case": case, "title": title, "text": text})
 
     def exit_handler() -> None:
         get_app().exit()
