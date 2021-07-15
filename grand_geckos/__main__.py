@@ -1,3 +1,3 @@
-from grand_geckos.ui.app import run_app
+from grand_geckos.ui.auth import run_app_init
 
-run_app(case=0)
+run_app_init()
