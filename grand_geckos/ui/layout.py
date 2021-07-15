@@ -1,3 +1,4 @@
+from cryptography.fernet import Fernet
 from prompt_toolkit.layout.containers import HSplit, VSplit
 from prompt_toolkit.widgets import HorizontalLine, Label
 
@@ -16,8 +17,9 @@ from grand_geckos.ui.shortcuts import (
 search_bar = SearchBarView()
 
 
-def generate_root(worker: DatabaseWorker):
+def generate_root(worker: DatabaseWorker, vault_key: Fernet):
     credentials = worker.user.credentials
+
     root = HSplit(
         [
             HorizontalSpacer(),
@@ -31,20 +33,41 @@ def generate_root(worker: DatabaseWorker):
                     VerticalSpacer(),
                     PanelView(
                         title="Platform",
-                        data=[ButtonView(cred.platform, action=controls.test_action) for cred in credentials],
+                        data=[
+                            ButtonView(
+                                vault_key.decrypt((cred.platform).encode("utf-8")).decode("utf-8"),
+                                action=controls.test_action,
+                            )
+                            for cred in credentials
+                        ],
                     ),
                     VerticalSpacer(),
                     PanelView(
                         title="Name@Username",
                         data=[
-                            ButtonView(cred.name + "@" + cred.credential_username, action=controls.test_action)
+                            ButtonView(
+                                vault_key.decrypt((cred.credential_name).encode("utf-8")).decode("utf-8")
+                                + "@"
+                                + vault_key.decrypt((cred.credential_username).encode("utf-8")).decode("utf-8"),
+                                action=controls.test_action,
+                            )
                             for cred in credentials
                         ],
                     ),
                     VerticalSpacer(),
                     PanelView(
                         title="Password",
-                        data=[Label(("*" * len(cred.credential_password))) for cred in credentials],
+                        data=[
+                            Label(
+                                (
+                                    "*"
+                                    * len(
+                                        vault_key.decrypt((cred.credential_password).encode("utf-8")).decode("utf-8")
+                                    )
+                                )
+                            )
+                            for cred in credentials
+                        ],
                     ),
                     VerticalSpacer(),
                 ]

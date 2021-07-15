@@ -51,11 +51,17 @@ class Credential(Base):
     user = relationship("User", back_populates="credentials")
 
     def __init__(
-        self, credential_name: str, credential_username: str, credential_password: str, platform: str, user: User
+        self,
+        credential_name: str,
+        credential_username: str,
+        credential_password: str,
+        platform: str,
+        actual_password: str,
+        user: User,
     ) -> None:
         salt = urlsafe_b64decode(user.salt)
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=10000)
-        key = urlsafe_b64encode(kdf.derive((user.password.encode("utf-8"))))
+        key = urlsafe_b64encode(kdf.derive((actual_password.encode("utf-8"))))
         f = Fernet(key)
         self.credential_name = f.encrypt(credential_name.encode("utf-8")).decode("utf-8")
         self.credential_username = f.encrypt(credential_username.encode("utf-8")).decode("utf-8")
