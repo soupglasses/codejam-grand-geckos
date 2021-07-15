@@ -14,7 +14,7 @@ from grand_geckos.database.models import User
 class DatabaseWorker:
     """A class that creates a connection between the DB Layer and UI layer"""
 
-    engine = create_engine("sqlite:///worker.db", echo=True)
+    engine = create_engine("sqlite:///worker.db")
 
     def __init__(self, user: User):
         self.session = sessionmaker(bind=DatabaseWorker.engine)()
@@ -49,6 +49,8 @@ class DatabaseWorker:
         """
         session = sessionmaker(bind=DatabaseWorker.engine)()
         user = session.query(User).filter_by(username=username).first()
+        if user is None:
+            raise AuthenticationError("User does not exists!")
         salt = urlsafe_b64decode(user.salt)
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=10000)
         key = urlsafe_b64encode(kdf.derive((password.encode("utf-8"))))
@@ -57,3 +59,6 @@ class DatabaseWorker:
             return cls(user=user)
         else:
             raise AuthenticationError("Wrong password, or username.")
+
+    def list_credentials(self):
+        return self.user.credentials
