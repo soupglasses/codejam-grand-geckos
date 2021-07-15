@@ -15,11 +15,11 @@ class DatabaseWorker:
         self.user: User = self.session.query(User).filter_by(username=user.username, password=user.password).first()
 
     @classmethod
-    def create_user(cls, username: str, password: str, password_confirm: str) -> Union[bool, User]:
+    def create_user(cls, username: str, password: str, password_confirm: str) -> Union[None, User]:
         session = sessionmaker(bind=DatabaseWorker.engine)()
         check_user = session.query(User).filter_by(username=username).first()
         if check_user is not None:
-            return UserAlreadyExistsError("User already exists")
+            raise UserAlreadyExistsError("User already exists")
         else:
             user = User(username=username, password=password, password_confirm=password_confirm)
             session.add(user)
