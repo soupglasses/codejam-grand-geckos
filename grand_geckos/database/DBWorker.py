@@ -1,21 +1,28 @@
+from base64 import urlsafe_b64decode, urlsafe_b64encode
 from typing import Union
 
+from cryptography.fernet import Fernet
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from grand_geckos.database.exceptions import UserAlreadyExistsError
+from grand_geckos.database.exceptions import AuthenticationError, UserAlreadyExistsError
 from grand_geckos.database.models import User
 
 
 class DatabaseWorker:
-    engine = create_engine("sqlite:///dbinfo/worker.db", echo=True)
+    """A class that creates a connection between the DB Layer and UI layer"""
+
+    engine = create_engine("sqlite:///worker.db", echo=True)
 
     def __init__(self, user: User):
         self.session = sessionmaker(bind=DatabaseWorker.engine)()
-        self.user: User = self.session.query(User).filter_by(username=user.username, password=user.password).first()
+        self.user: User = self.session.query(User).filter_by(id=user.id).first()
 
     @classmethod
     def create_user(cls, username: str, password: str, password_confirm: str) -> Union[None, User]:
+        """Returns a new DatabaseWorker instance with the newly registered user if every check passes"""
         session = sessionmaker(bind=DatabaseWorker.engine)()
         check_user = session.query(User).filter_by(username=username).first()
         if check_user is not None:
@@ -25,3 +32,28 @@ class DatabaseWorker:
             session.add(user)
             session.commit()
             return cls(user)
+
+    def delete_user(self):
+        """Deletes the current logged in user and terminates the session"""
+        self.session.query(User).filter_by(id=self.user.id).delete()
+        del self.user
+        self.session.close()
+        del self.session
+
+    @classmethod
+    def auth_user(cls, username: str, password: str) -> Union[None, User]:
+        """
+        Authenticates the user, if the credentials are correct returns a DatabaseWorker instance with the user
+
+        Otherwise, it raises an AuthenticationError
+        """
+        session = sessionmaker(bind=DatabaseWorker.engine)()
+        user = session.query(User).filter_by(username=username).first()
+        salt = urlsafe_b64decode(user.salt)
+        kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=10000)
+        key = urlsafe_b64encode(kdf.derive((password.encode("utf-8"))))
+        f = Fernet(key)
+        if f.decrypt(user.password.encode("utf-8")).decode("utf-8") == password:
+            return cls(user=user)
+        else:
+            raise AuthenticationError("Wrong password, or username.")
