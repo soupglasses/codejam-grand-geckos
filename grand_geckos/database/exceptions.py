@@ -11,3 +11,7 @@ class UserAlreadyExistsError(ArgumentError):
 
 class AuthenticationError(ArgumentError):
     pass
+
+
+class PasswordNotStrongEnough(ArgumentError):
+    pass
