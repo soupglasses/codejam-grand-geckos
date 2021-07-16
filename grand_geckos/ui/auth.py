@@ -16,25 +16,36 @@ def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
     result = button_dialog(
         title="Done!",
         text="What's next?",
-        buttons=[
-            ("Vault", True),
-            ("New Credential", False),
-        ],
+        buttons=[("Vault", True), ("New Credential", False), ("Exit", None)],
     ).run()
     if result:
         dashboard_app(worker, vault_key).run()
-    else:
+        main_menu(worker, vault_key, text_pass)
+    elif result is None:
+        exit()
+    elif not result:
         text_credential_name = input_dialog(
             title="What would you like to name this credential? (eg. Github Work, Raspberry Pi4, SSH-hobby)", text=""
         ).run()
-
+        if not text_credential_name:
+            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            main_menu(worker, vault_key, text_pass)
         text_credential_username = input_dialog(
             title="Username - Credential", text="Please type in the username for the credential"
         ).run()
+        if not text_credential_username:
+            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            main_menu(worker, vault_key, text_pass)
         text_credential_password = input_dialog(
             title="Password - Credential", text="Please type in the password for the credential", password=True
         ).run()
+        if not text_credential_password:
+            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            main_menu(worker, vault_key, text_pass)
         text_platform = input_dialog(title="Credential Platform (eg. github.com, mail.google.com, ssh)", text="").run()
+        if not text_platform:
+            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            main_menu(worker, vault_key, text_pass)
         cred = Credential(
             credential_name=text_credential_name,
             actual_password=text_pass,
@@ -44,8 +55,7 @@ def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
             user=worker.user,
         )
         worker.append_credential(cred)
-        dashboard_app(worker, vault_key).run()
-    return
+        main_menu(worker, vault_key, text_pass)
 
 
 def run_app_init() -> None:
@@ -59,17 +69,20 @@ def run_app_init() -> None:
         # Registration Process - Register
         if result is True:
             text_username = input_dialog(title="Register - Username", text="Please type your username").run()
-            if text_username is None:
+            if not text_username:
+                message_dialog(title="Oops, something went wrong!", text="Returning to main menu..").run()
                 continue
             text_pass = input_dialog(
                 title="Register - Password", text="Please type your password:", password=True
             ).run()
-            if text_pass is None:
+            if not text_pass:
+                message_dialog(title="Oops, something went wrong!", text="Returning to main menu..").run()
                 continue
             text_pass_confirm = input_dialog(
                 title="Register - Password-Confirm", text="Please type your password again:", password=True
             ).run()
-            if text_pass_confirm is None:
+            if not text_pass_confirm:
+                message_dialog(title="Oops, something went wrong!", text="Returning to main menu..").run()
                 continue
             try:
                 worker = DatabaseWorker.create_user(
@@ -84,10 +97,12 @@ def run_app_init() -> None:
         # Login Process - Login
         elif result is False:
             text_username = input_dialog(title="Login - Username", text="Please type your username").run()
-            if text_username is None:
+            if not text_username:
+                message_dialog(title="Oops, something went wrong!", text="Returning to main menu..").run()
                 continue
             text_pass = input_dialog(title="Login - Password", text="Please type your password:", password=True).run()
-            if text_pass is None:
+            if not text_pass:
+                message_dialog(title="Oops, something went wrong!", text="Returning to main menu..").run()
                 continue
             try:
                 worker = DatabaseWorker.auth_user(username=text_username, password=text_pass)
