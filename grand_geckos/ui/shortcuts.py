@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Callable, List, Optional
 
 from prompt_toolkit.formatted_text import AnyFormattedText
 from prompt_toolkit.layout.containers import (
@@ -80,7 +80,7 @@ class ControlBarView(Frame):
 
 
 class ButtonView(Box):
-    def __init__(self, text, action, width=16) -> None:
+    def __init__(self, text: str, action: Callable[[], None], style: str = "class:button", width: int = 16) -> None:
 
         super().__init__(
             body=Button(
@@ -90,6 +90,6 @@ class ButtonView(Box):
                 left_symbol="",
                 right_symbol="",
             ),
-            style="class:button",
+            style=style,
             height=1,
         )

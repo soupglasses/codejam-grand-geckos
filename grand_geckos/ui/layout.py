@@ -1,6 +1,10 @@
+from types import SimpleNamespace
+
 from cryptography.fernet import Fernet
+from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
 from prompt_toolkit.layout.containers import HSplit, VSplit
-from prompt_toolkit.widgets import HorizontalLine, Label
+from prompt_toolkit.layout.controls import FormattedTextControl
+from prompt_toolkit.widgets import HorizontalLine
 
 from grand_geckos.database.DBWorker import DatabaseWorker
 from grand_geckos.ui import controls
@@ -17,15 +21,28 @@ from grand_geckos.ui.shortcuts import (
 search_bar = SearchBarView()
 
 
+def handle_button(password, id):
+    def handle_button_inside():
+        PyperclipClipboard().set_data(SimpleNamespace(text=password))
+        title.content = FormattedTextControl(
+            [("class:title bold", f"SECRET CRATE OF GRAND GECKOS(Password Copied![{id}])")]
+        )
+        return
+
+    return handle_button_inside
+
+
+title = TitleView(text="SECRET CRATE OF GRAND GECKOS")
+
+
 def generate_root(worker: DatabaseWorker, vault_key: Fernet):
     credentials = worker.user.credentials
 
     root = HSplit(
         [
             HorizontalSpacer(),
-            TitleView(text="SECRET CRATE OF GRAND GECKOS"),
+            title,
             HorizontalLine(),
-            search_bar,
             HorizontalLine(),
             HorizontalSpacer(),
             VSplit(
@@ -36,7 +53,7 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
                         data=[
                             ButtonView(
                                 vault_key.decrypt((cred.platform).encode("utf-8")).decode("utf-8"),
-                                action=controls.test_action,
+                                action=controls.action_none,
                             )
                             for cred in credentials
                         ],
@@ -49,7 +66,7 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
                                 vault_key.decrypt((cred.credential_name).encode("utf-8")).decode("utf-8")
                                 + "@"
                                 + vault_key.decrypt((cred.credential_username).encode("utf-8")).decode("utf-8"),
-                                action=controls.test_action,
+                                action=controls.action_none,
                             )
                             for cred in credentials
                         ],
@@ -58,13 +75,15 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
                     PanelView(
                         title="Password",
                         data=[
-                            Label(
-                                (
-                                    "*"
-                                    * len(
-                                        vault_key.decrypt((cred.credential_password).encode("utf-8")).decode("utf-8")
-                                    )
-                                )
+                            ButtonView(
+                                style="bold bg:ansiblue",
+                                text="COPY PASSWORD",
+                                action=handle_button(
+                                    id=cred.id,
+                                    password=vault_key.decrypt((cred.credential_password).encode("utf-8")).decode(
+                                        "utf-8"
+                                    ),
+                                ),
                             )
                             for cred in credentials
                         ],
@@ -75,10 +94,7 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
             HorizontalSpacer(),
             ControlBarView(
                 controls=[
-                    ButtonView(
-                        text="Exit: Ctrl+Q",
-                        action=controls.exit_app,
-                    ),
+                    ButtonView(text="Back to Menu: Ctrl+Q", action=controls.exit_app, width=32),
                 ]
             ),
             HorizontalSpacer(),

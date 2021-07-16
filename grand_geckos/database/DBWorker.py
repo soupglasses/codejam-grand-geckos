@@ -66,9 +66,13 @@ class DatabaseWorker:
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=10000)
         key = urlsafe_b64encode(kdf.derive((password.encode("utf-8"))))
         f = Fernet(key)
-        if f.decrypt(user.password.encode("utf-8")).decode("utf-8") == password:
-            return cls(user=user)
-        else:
+        try:
+
+            if f.decrypt(user.password.encode("utf-8")).decode("utf-8") == password:
+                return cls(user=user)
+            else:
+                raise AuthenticationError("Wrong password, or username.")
+        except Exception:
             raise AuthenticationError("Wrong password, or username.")
 
     def list_credentials(self):

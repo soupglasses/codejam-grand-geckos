@@ -10,6 +10,7 @@ prompt-toolkit = "^3.0.19"
 password-strength = "^0.0.3"
 SQLAlchemy = "^1.4.20"
 cryptography = "^3.4.7"
+pyperclip = "^1.8.2"
 
 [tool.poetry.dev-dependencies]
 black = "^21.6b0"

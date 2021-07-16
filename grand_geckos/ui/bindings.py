@@ -13,10 +13,6 @@ def _get_bindings(next_key, prev_key):
 
 def global_bindings(next_key="tab", prev_key="s-tab"):
     bindings = _get_bindings(next_key=next_key, prev_key=prev_key)
-    bindings.add("c-n", eager=True)(controls.new_entry)
-    bindings.add("c-e", eager=True)(controls.modify_entry)
-    bindings.add("c-r", eager=True)(controls.delete_entry)
-    bindings.add("c-w", eager=True)(controls.logout)
     bindings.add("c-q", eager=True)(controls.exit_app)
     return bindings
 

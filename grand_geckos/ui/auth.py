@@ -11,8 +11,8 @@ from grand_geckos.utils.password_checker import check_password
 def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
     result = button_dialog(
         title="Done!",
-        text="What's next?",
-        buttons=[("Vault", True), ("New Credential", False), ("Exit", None)],
+        text="Access your saved credentials, Add or Delete them.",
+        buttons=[("Vault", True), ("Add", False), ("Exit", None)],
     ).run()
     if result:
         dashboard_app(worker, vault_key).run()
