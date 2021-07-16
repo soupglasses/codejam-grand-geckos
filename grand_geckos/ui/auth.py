@@ -1,11 +1,17 @@
 from cryptography.fernet import Fernet
-from prompt_toolkit.shortcuts import button_dialog, input_dialog, message_dialog
+from prompt_toolkit.shortcuts import (
+    button_dialog,
+    input_dialog,
+    message_dialog,
+    yes_no_dialog,
+)
 
 from grand_geckos.database.DBWorker import DatabaseWorker
 from grand_geckos.database.exceptions import AuthenticationError, UserAlreadyExistsError
 from grand_geckos.database.models import Credential
 from grand_geckos.ui.dashboard import get_app as dashboard_app
 from grand_geckos.utils.password_checker import check_password
+from grand_geckos.utils.password_generator import generate_password
 
 
 def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
@@ -32,9 +38,14 @@ def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
         if not text_credential_username:
             message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
             main_menu(worker, vault_key, text_pass)
-        text_credential_password = input_dialog(
-            title="Password - Credential", text="Please type in the password for the credential", password=True
-        ).run()
+        strong_password = yes_no_dialog(title="Password", text="Would you like to generate a strong password?").run()
+        if strong_password:
+            text_credential_password = generate_password(length=35)
+        else:
+            text_credential_password = input_dialog(
+                title="Password - Credential", text="Please type in the password for the credential", password=True
+            ).run()
+
         if not text_credential_password:
             message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
             main_menu(worker, vault_key, text_pass)
