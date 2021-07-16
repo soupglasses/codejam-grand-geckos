@@ -7,14 +7,8 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from grand_geckos.database.exceptions import (
-    AuthenticationError,
-    PasswordMismatch,
-    PasswordNotStrongEnough,
-    UserAlreadyExistsError,
-)
+from grand_geckos.database.exceptions import AuthenticationError, UserAlreadyExistsError
 from grand_geckos.database.models import Credential, User
-from grand_geckos.utils.password_checker import check_password
 
 
 class DatabaseWorker:
@@ -29,17 +23,10 @@ class DatabaseWorker:
     @classmethod
     def create_user(cls, username: str, password: str, password_confirm: str) -> Union[None, "DatabaseWorker"]:
         """Returns a new DatabaseWorker instance with the newly registered user if every check passes"""
-        if password != password_confirm:
-            raise PasswordMismatch("Passwords must match!")
         session = sessionmaker(bind=DatabaseWorker.engine)()
         check_user = session.query(User).filter_by(username=username).first()
-        password_strength = check_password(password)
         if check_user is not None:
             raise UserAlreadyExistsError("User already exists")
-        elif password_strength:
-            raise PasswordNotStrongEnough(
-                "Password is not strong enough! \n -" + "\n -".join([str(issue) for issue in password_strength])
-            )
         else:
             user = User(username=username, password=password, password_confirm=password_confirm)
             session.add(user)

@@ -9,8 +9,6 @@ from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import relationship
 
-from grand_geckos.database.exceptions import PasswordMismatch
-
 Base: DeclarativeMeta = declarative_base()
 
 
@@ -26,8 +24,6 @@ class User(Base):
     last_login = Column(DateTime)
 
     def __init__(self, username: str, password: str, password_confirm: str) -> None:
-        if password_confirm != password:
-            raise PasswordMismatch("Password Mismatch, the two passwords are not the same")
         salt_decoded = urandom(16)
         kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt_decoded, iterations=10000)
         key = urlsafe_b64encode(kdf.derive((password.encode("utf-8"))))
