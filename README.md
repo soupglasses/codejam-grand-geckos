@@ -1,16 +1,29 @@
-# Codejam 8 - Team Grand Geckos
+# Python Discord Summer Code Jam 21' 
+## Team Grand Geckos presents.. SECRET CRATE OF GRAND GECKOS 
+<p align=center><img src="https://cdn.discordapp.com/attachments/861933201198809128/862319028693762058/SPOILER_grandgecko-logo.jpg" alt="Team Grand Geckos' Logo By Nikz" width="250"/></p>
 
 [About Python Discord's Code Jam 8](https://pythondiscord.com/events/code-jams/8/)
 
-## Development
+## About the project...
 
-Requires Python 3.8 or higher
+As the name indicates, our project is a very secret and mostly safe crate... of course.. it's a **TUI** password manager!
 
+Our password manager stores your data locally, encrypted in a `Vault` inside that crate.. that can be only unlocked by.. *YOU*!
+
+You can add credentials as you wish, but if you don't want to bother with creating safe passwords.. just leave it to us, we'll do it.
+But, you can also store your pre-existing credentials as well, it'll be safely stored in the Vault.
+
+
+## How to setup the project?
+
+* *Requires Python 3.8 or higher*
+
+* *The project also uses SQLite 3*
 ### Dependency:
-
-```bash
-pip install --user poetry
-```
+  * Poetry
+  ```bash
+  pip install --user poetry
+  ```
 
 ### First Time Setup:
 
@@ -23,26 +36,26 @@ poetry run pre-commit install
 
 ### Running the Project:
 
-Using poetry run:
-```bash
-poetry run task main
-```
+* Using `poetry run`:
+  ```bash
+  poetry run task main
+  ```
 
-If you are in a `poetry shell`:
-```bash
-python3 -m grand_geckos
-```
+* If you are in a `poetry shell`:
+  ```bash
+  python3 -m grand_geckos
+  ```
 
-### Before Commiting/Pushing:
+### Note 
 
-Its reccomended to run it trough the linters manually:
+It' s reccomended to run the code trough the linters manually:
 
-With poetry:
-```bash
-poetry run task lint
-```
+* With `poetry run` command:
+  ```bash
+  poetry run task lint
+  ```
 
-Or run it trough `poetry shell`:
-```bash
-pre-commit run --all-files
-```
+* Or run it trough `poetry shell`:
+  ```bash
+  pre-commit run --all-files
+  ```
