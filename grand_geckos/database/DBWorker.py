@@ -1,5 +1,5 @@
 from base64 import urlsafe_b64decode, urlsafe_b64encode
-from typing import Union
+from typing import List, Union
 
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
@@ -50,6 +50,15 @@ class DatabaseWorker:
     def append_credential(self, cred: Credential) -> None:
         self.user.credentials.append(cred)
         self.session.commit()
+
+    def delete_credentials(self, ids: List[int], user: User):
+        for id in ids:
+            to_delete = self.session.query(Credential).filter_by(id=id, user=user).first()
+            if to_delete is None:
+                continue
+            self.session.delete(to_delete)
+            self.session.commit()
+        return True
 
     @classmethod
     def auth_user(cls, username: str, password: str) -> Union[None, "DatabaseWorker"]:

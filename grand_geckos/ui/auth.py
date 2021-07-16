@@ -1,6 +1,7 @@
 from cryptography.fernet import Fernet
 from prompt_toolkit.shortcuts import (
     button_dialog,
+    checkboxlist_dialog,
     input_dialog,
     message_dialog,
     yes_no_dialog,
@@ -17,26 +18,46 @@ from grand_geckos.utils.password_generator import generate_password
 def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
     result = button_dialog(
         title="Done!",
-        text="Access your saved credentials, Add or Delete them.",
-        buttons=[("Vault", True), ("Add", False), ("Exit", None)],
+        text="Access your saved credentials, Add a new one or Delete them.",
+        buttons=[("Vault", True), ("Add", False), ("Delete", ...), ("Exit", None)],
     ).run()
-    if result:
+    if result is True:
         dashboard_app(worker, vault_key).run()
         main_menu(worker, vault_key, text_pass)
     elif result is None:
         exit()
-    elif not result:
+    elif result is ...:
+        results_array = checkboxlist_dialog(
+            title="Delete Credentials",
+            text="Choose the credentials you would like to delete",
+            values=[
+                (cred.id, vault_key.decrypt((cred.credential_name.encode("utf-8"))).decode("utf-8"))
+                for cred in worker.user.credentials
+            ],
+        ).run()
+        if not results_array:
+            main_menu(worker, vault_key, text_pass)
+        else:
+            result = worker.delete_credentials(results_array, user=worker.user)
+            if not result:
+                message_dialog(title="Oops, something went wrong!", text="Returning to menu..").run()
+                main_menu(worker, vault_key, text_pass)
+            else:
+                message_dialog(title="Success!", text="Credential(s) deleted..").run()
+                main_menu(worker, vault_key, text_pass)
+
+    elif result is False:
         text_credential_name = input_dialog(
             title="What would you like to name this credential? (eg. Github Work, Raspberry Pi4, SSH-hobby)", text=""
         ).run()
         if not text_credential_name:
-            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            message_dialog(title="Oops, something went wrong!", text="Returning to menu..").run()
             main_menu(worker, vault_key, text_pass)
         text_credential_username = input_dialog(
             title="Username - Credential", text="Please type in the username for the credential"
         ).run()
         if not text_credential_username:
-            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            message_dialog(title="Oops, something went wrong!", text="Returning to menu..").run()
             main_menu(worker, vault_key, text_pass)
         strong_password = yes_no_dialog(title="Password", text="Would you like to generate a strong password?").run()
         if strong_password:
@@ -47,11 +68,11 @@ def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
             ).run()
 
         if not text_credential_password:
-            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            message_dialog(title="Oops, something went wrong!", text="Returning to menu..").run()
             main_menu(worker, vault_key, text_pass)
         text_platform = input_dialog(title="Credential Platform (eg. github.com, mail.google.com, ssh)", text="").run()
         if not text_platform:
-            message_dialog(title="Oops, something went wrong!", text="Empty fields are not allowed!").run()
+            message_dialog(title="Oops, something went wrong!", text="Returning to menu..").run()
             main_menu(worker, vault_key, text_pass)
         cred = Credential(
             credential_name=text_credential_name,
