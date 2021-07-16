@@ -1,6 +1,6 @@
 # Python Discord Summer Code Jam 21' 
 ## Team Grand Geckos presents.. SECRET CRATE OF GRAND GECKOS 
-<p align=center><img src="https://cdn.discordapp.com/attachments/861933201198809128/862319028693762058/SPOILER_grandgecko-logo.jpg" alt="Team Grand Geckos' Logo By Nikz" width="250"/></p>
+<p align=center><img src="https://github.com/nikhiljohn10/codejam-grand-geckos/raw/develop/assets/images/grand_gecko_logo@0.5x.png" alt="Team Grand Geckos' Logo By Nikz Jon(nikhiljohn10)" width="500"/></p>
 
 [About Python Discord's Code Jam 8](https://pythondiscord.com/events/code-jams/8/)
 
