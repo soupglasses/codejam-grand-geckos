@@ -1,5 +1,5 @@
-# Python Discord Summer Code Jam 21' 
-## Team Grand Geckos presents.. SECRET CRATE OF GRAND GECKOS 
+# Python Discord Summer Code Jam 21'
+## Team Grand Geckos presents.. SECRET CRATE OF GRAND GECKOS
 <p align=center><img src="https://github.com/imsofi/codejam-grand-geckos/raw/develop/assets/images/grand_gecko_logo@0.5x.png" alt="Team Grand Geckos' Logo By Nikz Jon(nikhiljohn10)" width="500"/></p>
 
 [About Python Discord's Code Jam 8](https://pythondiscord.com/events/code-jams/8/)
@@ -46,7 +46,7 @@ poetry run pre-commit install
   python3 -m grand_geckos
   ```
 
-### Note 
+### Note
 
 It' s reccomended to run the code trough the linters manually:
 
@@ -58,4 +58,9 @@ It' s reccomended to run the code trough the linters manually:
 * Or run it trough `poetry shell`:
   ```bash
   pre-commit run --all-files
+  ```
+
+If you get errors while running `poetry install`. Try following command:
+  ```bash
+  poetry update
   ```
