@@ -4,7 +4,7 @@ from cryptography.fernet import Fernet
 from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
 from prompt_toolkit.layout.containers import HSplit, VSplit
 from prompt_toolkit.layout.controls import FormattedTextControl
-from prompt_toolkit.widgets import HorizontalLine
+from prompt_toolkit.widgets import HorizontalLine, Label
 
 from grand_geckos.database.DBWorker import DatabaseWorker
 from grand_geckos.ui import controls
@@ -13,12 +13,9 @@ from grand_geckos.ui.shortcuts import (
     ControlBarView,
     HorizontalSpacer,
     PanelView,
-    SearchBarView,
     TitleView,
     VerticalSpacer,
 )
-
-search_bar = SearchBarView()
 
 
 def handle_button(password, id):
@@ -51,9 +48,8 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
                     PanelView(
                         title="Platform",
                         data=[
-                            ButtonView(
+                            Label(
                                 vault_key.decrypt((cred.platform).encode("utf-8")).decode("utf-8"),
-                                action=controls.action_none,
                             )
                             for cred in credentials
                         ],
@@ -62,11 +58,10 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
                     PanelView(
                         title="Name@Username",
                         data=[
-                            ButtonView(
+                            Label(
                                 vault_key.decrypt((cred.credential_name).encode("utf-8")).decode("utf-8")
                                 + "@"
                                 + vault_key.decrypt((cred.credential_username).encode("utf-8")).decode("utf-8"),
-                                action=controls.action_none,
                             )
                             for cred in credentials
                         ],
