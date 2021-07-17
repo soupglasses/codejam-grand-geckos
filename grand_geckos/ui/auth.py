@@ -30,7 +30,7 @@ ERROR_DIALOG_MESSAGE_MENU = "Returning to menu..💥"
 ERROR_DIALOG_MESSAGE_MAIN_MENU = "Returning to main menu..💥"
 
 
-def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str):
+def main_menu(worker: DatabaseWorker, vault_key: Fernet, text_pass: str) -> None:
     result = button_dialog(
         style=dialog_style,
         title="Done! 👏",

@@ -1,5 +1,3 @@
-from types import SimpleNamespace
-
 from cryptography.fernet import Fernet
 from prompt_toolkit.clipboard.pyperclip import PyperclipClipboard
 from prompt_toolkit.layout.containers import HSplit, VSplit
@@ -8,7 +6,7 @@ from prompt_toolkit.widgets import HorizontalLine, Label
 
 from grand_geckos.database.DBWorker import DatabaseWorker
 from grand_geckos.ui import controls
-from grand_geckos.ui.shortcuts import (
+from grand_geckos.ui.widgets import (
     ButtonView,
     ControlBarView,
     HorizontalSpacer,
@@ -20,7 +18,7 @@ from grand_geckos.ui.shortcuts import (
 
 def handle_button(password, id):
     def handle_button_inside():
-        PyperclipClipboard().set_data(SimpleNamespace(text=password))
+        PyperclipClipboard().set_text(password)
         title.content = FormattedTextControl(
             [("class:title bold", f"🔥SECRET CRATE OF GRAND GECKOS(Password Copied![{id}]) ✅ 🔥")]
         )
@@ -56,11 +54,11 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
                     ),
                     VerticalSpacer(),
                     PanelView(
-                        title="Name@Username",
+                        title="Name:Username",
                         data=[
                             Label(
                                 vault_key.decrypt(cred.credential_name.encode("utf-8")).decode("utf-8")
-                                + "@"
+                                + ":"
                                 + vault_key.decrypt(cred.credential_username.encode("utf-8")).decode("utf-8"),
                             )
                             for cred in credentials
@@ -91,10 +89,11 @@ def generate_root(worker: DatabaseWorker, vault_key: Fernet):
             ControlBarView(
                 controls=[
                     ButtonView(text="Back to Menu: Ctrl+Q", action=controls.exit_app, width=32),
-                ]
+                ],
+                style="fg: ansiblack",
             ),
             HorizontalSpacer(),
         ],
-        style="bg:#ffa500 fg: ansiblack bold",
+        style="bg:#ffa500 fg: ansiblack",
     )
     return root

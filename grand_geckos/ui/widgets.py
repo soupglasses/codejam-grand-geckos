@@ -70,11 +70,10 @@ class PanelView(Frame):
 
 
 class ControlBarView(Frame):
-    def __init__(self, controls: Optional[List[AnyContainer]] = None) -> None:
+    def __init__(self, controls: Optional[List[AnyContainer]] = None, *, style: str = "") -> None:
         super().__init__(
             body=Box(body=VSplit(controls or [], align="CENTER", padding=2), style="class:bottom-bar", height=1),
-            # TODO: This border color is not matching background
-            style="#111111",
+            style=style,
             key_bindings=bottombar_bindings(),
         )
 
