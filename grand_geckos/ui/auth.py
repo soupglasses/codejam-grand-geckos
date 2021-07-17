@@ -190,7 +190,7 @@ def run_app_init() -> None:
             try:
                 worker = DatabaseWorker.auth_user(username=text_username, password=text_pass)
             except AuthenticationError as e:
-                message_dialog(title="Error!", text=str(e)).run()
+                message_dialog(style=dialog_style, title="Error!", text=str(e)).run()
                 continue
 
             vault_key = worker.vault_key(worker.user, text_pass)
