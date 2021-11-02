@@ -13,6 +13,8 @@ Our password manager stores your data locally, encrypted in a `Vault` inside tha
 You can add credentials as you wish, but if you don't want to bother with creating safe passwords.. just leave it to us, we'll do it.
 But, you can also store your pre-existing credentials as well, it'll be safely stored in the Vault.
 
+[Video Presentation](https://www.youtube.com/watch?v=2QOGUdgbB10)
+
 
 ## How to setup the project?
 
