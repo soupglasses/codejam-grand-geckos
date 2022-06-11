@@ -1,6 +1,3 @@
-from typing import List, AnyStr
-
-words: List[AnyStr] = """
 A
 A-horizon
 A-ok
@@ -308473,6 +308470,3 @@ Zyzzyva
 Zyzzyvas
 Zzz
 Zzzs
-"""[
-    1:-1
-].splitlines()

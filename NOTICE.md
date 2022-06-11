@@ -1,6 +1,6 @@
 # Attributions
 
-## Wordlist in `static/words.py`
+## Wordlist in `static/words.txt`
 
 Copyright 2015-2019 Jeremy M. Rifkin
 

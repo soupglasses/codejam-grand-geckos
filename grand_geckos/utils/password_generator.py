@@ -1,7 +1,8 @@
+import pkgutil
 import secrets
 import string
 
-from grand_geckos.static import words
+words = str(pkgutil.get_data("grand_geckos", "static/words.txt"))
 
 
 def generate_password(
