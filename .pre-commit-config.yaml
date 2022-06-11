@@ -18,7 +18,7 @@ repos:
       name: Isort  - Auto-sort Imports
       exclude: tests
   - repo: https://github.com/ambv/black
-    rev: 21.6b0
+    rev: 22.3.0
     hooks:
     - id: black
       name: Black  - Formatting
